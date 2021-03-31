@@ -36,6 +36,9 @@
             <label>Totales: </label><label id="questionnaire-total-answers"></label>
             <input type="button" onclick="restart()" value="Nuevo intento">  
         </div>
+        <div>
+            <input type="button" onclick="downloadHistory()" value="Guardar historial en fichero">  
+        </div>
     </body>
     <script>
         const MERC_PEL_PATH="img/merc-pel/";
@@ -84,7 +87,7 @@
             { name: "Prohibida-clasificacion-lanzamiento-o-gravedad", tag: "Diversos (9)", text: "Prohibida clasificación por lanzamiento o gravedad"},
             { name: "Peligro-medio-ambiente", tag: "", text: "Materia peligrosa para el medio ambiente"},
             { name: "Peligro-refrigeracion", tag: "", text: "Riesgo de asfixia por materiales peligrosos usados para refrigeración"},
-            { name: "Panel-Naranja", tag: "", text: "Medidas: 30*40*15 cm. Nº superior: representa la peligrosidad de la materia, la repetición de un número implica mayor peligrosidad y la X representa que reacciona violentamente con el agua. Los peligros son como exgalisocotorracodi, pero el di(9) es peligro de reacción violenta espontánea. El nº inferior representa el identificador de la materia o nº ONU."},
+            { name: "Panel-naranja", tag: "", text: "Medidas: 30*40*15 cm. Nº superior: representa la peligrosidad de la materia, la repetición de un número implica mayor peligrosidad y la X representa que reacciona violentamente con el agua. Los peligros son como exgalisocotorracodi, pero el di(9) es peligro de reacción violenta espontánea. El nº inferior representa el identificador de la materia o nº ONU."},
             { name: "Banda-naranja", tag: "", text: "En vagones cisterna destinados al transporte de gases liacuados, licuados refrigerados o disueltos. Banda no retrorreflectante que rodea la cisterna a media altura, 30cm de grosor."},
         ]
         var errorsHistory = [];
@@ -139,12 +142,16 @@
                 var foundInHistory=false;
                 for(var i=0; i<errorsHistory.length; i++){
                     if(errorsHistory[i].name == signName){
+                        console.log(signName);
+                        console.log(errorsHistory[i].name);
+                        
                         errorsHistory[i].errorCount++;
+                        console.log(errorsHistory[i].errorCount);
                         foundInHistory = true;
                         break;
                     }
                 }
-                if(!foundInHistory){
+                if(foundInHistory == false){
                     errorsHistory.push({ name: signName, errorCount: 1});
                 }
                 //Update cookie
@@ -195,9 +202,18 @@
                 i++;
             }
         }
-
+        function downloadHistory() {
+            download(JSON.stringify(errorsHistory), 'practicar-señales-historico.txt', 'text/plain');
+        }
+        function download(content, fileName, contentType) {
+            var a = document.createElement("a");
+            var file = new Blob([content], {type: contentType});
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+        }
         function checkHistoryCookie() {
-            var cookie = getCookie("errorsHistory");
+            var cookie = getCookie("errorHistory");
             if(cookie == "")
             {
                 return;
