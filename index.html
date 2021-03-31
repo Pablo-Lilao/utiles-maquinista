@@ -1,0 +1,227 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Practicar señales</title>
+        <meta name="description" content="Practicar señales ferroviarias">
+        <link rel="stylesheeet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <form>
+            <input type="checkbox" id="merc_pel" name="merc_per" value="merc_per" checked disabled>
+            <label for="merc_pel">Mercancías peligrosas</label>
+            <input id="startButton" type="button" onclick="start(this)" value="Comenzar"> 
+        </form>
+
+        <div id="questions" style="display: none;">
+            <div>
+                <label>¿Qué representa esta señal?</label>
+                <div>
+                    <img id="img-senal" src="">
+                </div>
+                    
+                <div>
+                    <input type="button" onclick="toggleSolution()" value="Ver respuesta"> 
+                    <label id="solucion" style="display: none;"></label>
+                    <label id="sign-name" style="display: none;"></label>
+                </div>
+            </div>
+            <div id="resultButtons" style="display: none;">
+                <input type="button" onclick="next(false)" value="Fallo">
+                <input type="button" onclick="next(true)" value="Acierto">  
+            </div>
+        </div>
+        <div id="questionnaire-results" style="display: none;">
+            <label>Aciertos: </label><label id="questionnaire-right-answers"></label>
+            <label>Fallos: </label><label id="questionnaire-wrong-answers"></label>
+            <label>Totales: </label><label id="questionnaire-total-answers"></label>
+            <input type="button" onclick="restart()" value="Nuevo intento">  
+        </div>
+    </body>
+    <script>
+        const MERC_PEL_PATH="img/merc-pel/";
+        var mercPelImgNames=[
+            "Botellas-butano-propano-2.1",
+            "Explosivos-divisiones-peligro-1.1"
+        ];
+        var signs = [
+            { name: "Explosivos-divisiones-peligro-1.1", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
+            { name: "Explosivos-divisiones-peligro-1.2", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
+            { name: "Explosivos-divisiones-peligro-1.3", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
+            { name: "Explosivo-1.4", tag: "Etiqueta 1.4", text: "Explosivo"},
+            { name: "Explosivo-1.5", tag: "Etiqueta 1.5", text: "Explosivo"},
+            { name: "Explosivo-1.6", tag: "Etiqueta 1.6", text: "Explosivo"},
+            { name: "Botellas-butano-propano-2.1", tag: "Etiqueta 2.1", text: "Botellas de butano/propano (Gas inflamable)"},
+            { name: "Gas-inflamable-2.1(1)", tag: "Etiqueta 2.1", text: "Gas inflamable"},
+            { name: "Gas-inflamable-2.1(2)", tag: "Etiqueta 2.1", text: "Gas inflamable"},
+            { name: "Gas-noinflamable-notoxico-2.2.(1)", tag: "Etiqueta 2.2", text: "Gas no inflamable y no tóxico"},
+            { name: "Gas-noinflamable-notoxico-2.2.(2)", tag: "Etiqueta 2.2", text: "Gas no inflamable y no tóxico"},
+            { name: "Gas-toxico-2.3", tag: "Etiqueta 2.3", text: "Gas tóxico"},
+            { name: "Liquido-inflamable-3(1)", tag: "Etiqueta 3", text: "Líquido inflamable"},
+            { name: "Liquido-inflamable-3(2)", tag: "Etiqueta 3", text: "Líquido inflamable"},
+            { name: "Solido-inflamable-Auto-Ex-Des-4.1", tag: "Etiqueta 4.1", text: "Sólido inflamable autorreactiva y explosiva desensibilizada sólida"},
+            { name: "Solido-inflamacion-espontanea-4.2", tag: "Etiqueta 4.2", text: "Inflamación espontánea"},
+            { name: "Gas-Inflamable-Contacto-Agua-4.3(1)", tag: "Etiqueta 4.3", text: "Reacciona al agua produciendo gas inflamable"},
+            { name: "Gas-Inflamable-Contacto-Agua-4.3(2)", tag: "Etiqueta 4.3", text: "Reacciona al agua produciendo gas inflamable"},
+            { name: "Comburente-5.1", tag: "Etiqueta 5.1", text: "Comburente"},
+            { name: "Peroxido-organico-5.1-2005", tag: "Etiqueta 5.2", text: "Peróxido orgánico"},
+            { name: "Peroxido-organico-5.2-2007(1)", tag: "Etiqueta 5.2", text: "Peróxido orgánico"},
+            { name: "Peroxido-organico-5.2-2007(2)", tag: "Etiqueta 5.2", text: "Peróxido orgánico"},
+            { name: "Toxico-6.1", tag: "Etiqueta 6.1", text: "Tóxico"},
+            { name: "Infeccioso-6.2", tag: "Etiqueta 6.2", text: "Infeccioso"},
+            { name: "Radiactivo-exento-7A", tag: "Etiqueta 7A", text: "Radiactivo exento"},
+            { name: "Radiactivo-7B", tag: "Etiqueta 7B", text: "Radiactivo"},
+            { name: "Radiactivo-7C", tag: "Etiqueta 7C", text: "Radiactivo"},
+            { name: "Fisionable-7E", tag: "Etiqueta 7E", text: "Fisionable"},
+            { name: "Radiactivo-Vehiculo-7D", tag: "Etiqueta 7D", text: "Radiactivo vehículo"},
+            { name: "Corrosivo-8", tag: "Etiqueta 8", text: "Corrosivo"},
+            { name: "Otros-peligros-9", tag: "Diversos (9)", text: "Otros peligros"},
+            { name: "Bulto-exento-Carga-general", tag: "Diversos (9)", text: "Bulto exento del RID. Carga general"},
+            { name: "Orientacion-bulto", tag: "Diversos (9)", text: "Orientación del bulto. Obligatorio para: Embalajes combinados con envases interiores que contengan líquidos, envases y embalajes simples con orificios de ventilación, recipientes criógenicos específicos para el transporte de gas licuado refrigerado y máquinas o aparatos que contengan mercancías peligrosas líquidas cuando deba mantenerse en una orientación determinada"},
+            { name: "Sobreembalaje", tag: "Diversos (9)", text: "Sobreembalaje"},
+            { name: "Mercancia-en-caliente", tag: "Diversos (9)", text: "Mercancía transportada en caliente. Para temperaturas >100ºC si son líquidos y >240ºC si son sólidos"},
+            { name: "Unidad-sometida-a-fumigacion", tag: "Diversos (9)", text: "Unidad sometida a fumigación"},
+            { name: "Manipular-con-precaucion-13", tag: "Diversos (9)", text: "Maniobras ferrocarril. Manipular con precaución."},
+            { name: "Prohibida-clasificacion-lanzamiento-o-gravedad", tag: "Diversos (9)", text: "Prohibida clasificación por lanzamiento o gravedad"},
+            { name: "Peligro-medio-ambiente", tag: "", text: "Materia peligrosa para el medio ambiente"},
+            { name: "Peligro-refrigeracion", tag: "", text: "Riesgo de asfixia por materiales peligrosos usados para refrigeración"},
+            { name: "Panel-Naranja", tag: "", text: "Medidas: 30*40*15 cm. Nº superior: representa la peligrosidad de la materia, la repetición de un número implica mayor peligrosidad y la X representa que reacciona violentamente con el agua. Los peligros son como exgalisocotorracodi, pero el di(9) es peligro de reacción violenta espontánea. El nº inferior representa el identificador de la materia o nº ONU."},
+            { name: "Banda-naranja", tag: "", text: "En vagones cisterna destinados al transporte de gases liacuados, licuados refrigerados o disueltos. Banda no retrorreflectante que rodea la cisterna a media altura, 30cm de grosor."},
+        ]
+        var sessionErrors = [];
+        var historyAnswers = [
+            { name: "Botellas-butano-propano-2.1", tag: "Etiqueta 2.1", text: "Botellas de butano/propano (Gas inflamable)", errorCount: 0},
+            { name: "Explosivos-divisiones-peligro-1.1", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3", errorCount: 0},
+            { name: "Liquido-inflamable-3(1)", tag: "Etiqueta 3", errorCount: 0}
+        ]
+        var verSolucion = false;
+        var signsAnswered=0;
+        var wrongAnswers=0;
+        var totalSigns=signs.length;
+        var signsQuestionnaire = [];
+
+        checkHistoryCookie();
+
+        function start(button) {
+            button.style.display="none";
+            button.disabled = true;
+            signsAnswered=0;
+            wrongAnswers=0;
+            for(var i=0;i<signs.length;i++){
+                signsQuestionnaire.push(signs[i]);
+            }
+            toggle(document.getElementById("questions"));
+            loadSign();
+        }
+        function restart() {
+            document.getElementById("startButton").disabled = false;
+            document.getElementById("startButton").style.display="block";
+            document.getElementById("questionnaire-results").style.display="none";
+            toggleSolution();
+        }
+        function toggleSolution() {
+            toggle(document.getElementById("solucion"));
+            toggle(document.getElementById("resultButtons"));
+        }
+        function toggle(elem) {
+            if(elem.style.display == "none"){
+                elem.style.display ="block";
+            }
+            else{
+                elem.style.display ="none";
+            }
+        }
+        function next(correctAnswer) {
+            signsAnswered++;
+            if(!correctAnswer){
+                wrongAnswers++;
+                var signName = document.getElementById("sign-name").innerHTML;
+                sessionErrors.push({ name: signName, errorCount: 1});
+
+                //Pass to history
+                // for(var i =0; historyAnswers.length;i++){
+                //     if(historyAnswers[i].name == document.getElementById("sign-name").innerHTML){
+                //         historyAnswers[i].errorCount++;
+                //         break;
+                //     }
+                // }
+
+                var d = new Date();
+                var year = d.getFullYear();
+                var month = d.getMonth();
+                var day = d.getDate();
+                var c = new Date(year + 1, month, day);
+                
+                // Al guardar sessionErrors, si tengo un fallo de otra sesión en el histórico se elimina
+                document.cookie = 'myObj='+ JSON.stringify(sessionErrors) +';expires=' + c + ';Secure';
+            }
+            if(signsAnswered<totalSigns){
+                loadSign();
+                toggleSolution();
+            }
+            else{
+                document.getElementById("questions").style.display="none";
+                showQuestionnaireResults();
+              
+            }
+        }
+        function showQuestionnaireResults() {
+            document.getElementById("questionnaire-results").style.display="block";
+            var rightAnswers = totalSigns - wrongAnswers;
+            document.getElementById("questionnaire-right-answers").innerHTML = rightAnswers + "(" + (rightAnswers*100/totalSigns).toFixed(2) + "%)";
+            document.getElementById("questionnaire-wrong-answers").innerHTML = wrongAnswers;
+            document.getElementById("questionnaire-total-answers").innerHTML = totalSigns;
+        }
+
+        function loadSign() {
+            console.log(signsQuestionnaire);
+            var randomIndex = Math.floor(Math.random() * signsQuestionnaire.length)
+            randomIndex = 0;
+            var randomSign = signsQuestionnaire[randomIndex];
+            var signName = randomSign.name;
+            var src =MERC_PEL_PATH+randomSign.name+".png";
+            document.getElementById("img-senal").src = src;
+            document.getElementById("solucion").innerHTML = randomSign.text;
+            document.getElementById("sign-name").innerHTML = randomSign.name;
+
+            var anySignsWithSameName = true;
+            var i=0;
+            while (i<signsQuestionnaire.length) {
+                if(signsQuestionnaire[i].name === signName) {
+                    signsQuestionnaire.splice(i,1);
+                    i=0; //reset search
+                }
+                i++;
+            }
+        }
+
+        function checkHistoryCookie() {
+            var cookie = getCookie("myObj");
+            var history = JSON.parse(cookie);
+            if(history != ""){
+                for(var i=0; i<history.length;i++){
+                    for(var j=0; j<signs.length;j++){
+                        if(signs[j].name === history[i].name){
+                            for(var k=0;k<history[i].errorCount;k++){
+                                signsQuestionnaire.push(signs[j]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+    </script>
+</html>
