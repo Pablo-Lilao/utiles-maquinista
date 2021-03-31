@@ -4,14 +4,39 @@
         <title>Practicar señales</title>
         <meta name="description" content="Practicar señales ferroviarias">
         <link rel="stylesheeet" type="text/css" href="style.css">
+
+        <script>
+            /*    
+            @licstart  The following is the entire license notice for the 
+            JavaScript code in this page.
+    
+            Copyright (C) 2021  Pablo Lilao Chinchilla
+    
+            The JavaScript code in this page is free software: you can
+            redistribute it and/or modify it under the terms of the GNU
+            General Public License (GNU GPL) as published by the Free Software
+            Foundation, either version 3 of the License, or (at your option)
+            any later version.  The code is distributed WITHOUT ANY WARRANTY;
+            without even the implied warranty of MERCHANTABILITY or FITNESS
+            FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+    
+            As additional permission under GNU GPL version 3 section 7, you
+            may distribute non-source (e.g., minimized or compacted) forms of
+            that code without the copy of the GNU GPL normally required by
+            section 4, provided you include this license notice and a URL
+            through which recipients can access the Corresponding Source.   
+    
+    
+            @licend  The above is the entire license notice
+            for the JavaScript code in this page.
+            */
+        </script>
     </head>
     <body>
-        <form>
-            <input type="checkbox" id="merc_pel" name="merc_per" value="merc_per" checked disabled>
-            <label for="merc_pel">Mercancías peligrosas</label>
-            <input id="startButton" type="button" onclick="start(this)" value="Comenzar"> 
-        </form>
-
+        <input type="checkbox" id="merc_pel" name="merc_per" value="merc_per" checked disabled hidden>
+        <label for="merc_pel" hidden>Mercancías peligrosas</label>
+        <h1>Ponte a prueba</h1>
+        <input id="startButton" type="button" onclick="start(this)" value="Comenzar"> 
         <div id="questions" style="display: none;">
             <div>
                 <label>¿Qué representa esta señal?</label>
@@ -36,13 +61,29 @@
             <label>Totales: </label><label id="questionnaire-total-answers"></label>
             <input type="button" onclick="restart()" value="Nuevo intento">  
         </div>
+        <div>
+            <h1>Historial</h1>
+            <h2>¿Qué es esto?</h2>
+            <p>Si te da pereza leer no hace falta que sigas, puedes seguir usando la aplicación como antes.</p>
+            <p>Ahora cada vez que marques una respuesta como error esta web lo guardará en una cookie en tu navegador.</p>
+            <p>Cada vez que entres en esta web, leeré la información de dicha cookie y por cada error que tengas en una pregunta será más probable que te la pregunte.</p>
+            <p>Pero las cookies se pueden eliminar de distintas maneras, así que te doy la opción de guardar todos tus fallos en un fichero de texto.
+                Así tienes un mejor control sobre tus datos, puedes descargarlo para utilizar esta web en otro navegador o dispositivo sin perder tu información.
+            </p>
+            <div>
+                <label for="uploadHistory">Cargar historial desde fichero</label>
+                <input type="file" id="uploadHistory" name="filename"> 
+            </div>  
+            <div><input type="button" onclick="downloadHistory()" value="Guardar historial en fichero">  </div>
+        </div>
+        <footer>
+            <div>Copyright (C) 2021  Pablo Lilao Chinchilla</div>
+            <div>GNU GPL version 3</div>
+            <div hidden>Imágenes obtenidas de distintos libros de formación</div>
+        </footer>
     </body>
     <script>
         const MERC_PEL_PATH="img/merc-pel/";
-        var mercPelImgNames=[
-            "Botellas-butano-propano-2.1",
-            "Explosivos-divisiones-peligro-1.1"
-        ];
         var signs = [
             { name: "Explosivos-divisiones-peligro-1.1", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
             { name: "Explosivos-divisiones-peligro-1.2", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
@@ -84,15 +125,10 @@
             { name: "Prohibida-clasificacion-lanzamiento-o-gravedad", tag: "Diversos (9)", text: "Prohibida clasificación por lanzamiento o gravedad"},
             { name: "Peligro-medio-ambiente", tag: "", text: "Materia peligrosa para el medio ambiente"},
             { name: "Peligro-refrigeracion", tag: "", text: "Riesgo de asfixia por materiales peligrosos usados para refrigeración"},
-            { name: "Panel-Naranja", tag: "", text: "Medidas: 30*40*15 cm. Nº superior: representa la peligrosidad de la materia, la repetición de un número implica mayor peligrosidad y la X representa que reacciona violentamente con el agua. Los peligros son como exgalisocotorracodi, pero el di(9) es peligro de reacción violenta espontánea. El nº inferior representa el identificador de la materia o nº ONU."},
+            { name: "Panel-naranja", tag: "", text: "Medidas: 30*40*15 cm. Nº superior: representa la peligrosidad de la materia, la repetición de un número implica mayor peligrosidad y la X representa que reacciona violentamente con el agua. Los peligros son como exgalisocotorracodi, pero el di(9) es peligro de reacción violenta espontánea. El nº inferior representa el identificador de la materia o nº ONU."},
             { name: "Banda-naranja", tag: "", text: "En vagones cisterna destinados al transporte de gases liacuados, licuados refrigerados o disueltos. Banda no retrorreflectante que rodea la cisterna a media altura, 30cm de grosor."},
         ]
-        var sessionErrors = [];
-        var historyAnswers = [
-            { name: "Botellas-butano-propano-2.1", tag: "Etiqueta 2.1", text: "Botellas de butano/propano (Gas inflamable)", errorCount: 0},
-            { name: "Explosivos-divisiones-peligro-1.1", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3", errorCount: 0},
-            { name: "Liquido-inflamable-3(1)", tag: "Etiqueta 3", errorCount: 0}
-        ]
+        var errorsHistory = [];
         var verSolucion = false;
         var signsAnswered=0;
         var wrongAnswers=0;
@@ -135,24 +171,19 @@
             if(!correctAnswer){
                 wrongAnswers++;
                 var signName = document.getElementById("sign-name").innerHTML;
-                sessionErrors.push({ name: signName, errorCount: 1});
-
-                //Pass to history
-                // for(var i =0; historyAnswers.length;i++){
-                //     if(historyAnswers[i].name == document.getElementById("sign-name").innerHTML){
-                //         historyAnswers[i].errorCount++;
-                //         break;
-                //     }
-                // }
-
-                var d = new Date();
-                var year = d.getFullYear();
-                var month = d.getMonth();
-                var day = d.getDate();
-                var c = new Date(year + 1, month, day);
                 
-                // Al guardar sessionErrors, si tengo un fallo de otra sesión en el histórico se elimina
-                document.cookie = 'myObj='+ JSON.stringify(sessionErrors) +';expires=' + c + ';Secure';
+                var foundInHistory=false;
+                for(var i=0; i<errorsHistory.length; i++){
+                    if(errorsHistory[i].name == signName){
+                        errorsHistory[i].errorCount++;
+                        foundInHistory = true;
+                        break;
+                    }
+                }
+                if(foundInHistory == false){
+                    errorsHistory.push({ name: signName, errorCount: 1});
+                }
+                updateHistoryCookie();
             }
             if(signsAnswered<totalSigns){
                 loadSign();
@@ -175,7 +206,6 @@
         function loadSign() {
             console.log(signsQuestionnaire);
             var randomIndex = Math.floor(Math.random() * signsQuestionnaire.length)
-            randomIndex = 0;
             var randomSign = signsQuestionnaire[randomIndex];
             var signName = randomSign.name;
             var src =MERC_PEL_PATH+randomSign.name+".png";
@@ -194,17 +224,60 @@
             }
         }
 
+        document.getElementById("uploadHistory").addEventListener('change', readSingleFile, false);
+        function readSingleFile(e) {
+            var file = e.target.files[0];
+            if (!file) {
+                return;
+            }
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var contents = e.target.result;
+                errorsHistory = JSON.parse(contents)
+                updateHistoryCookie();
+                var totalErrors=0;
+                for(var i=0; i<errorsHistory.length; i++){
+                    totalErrors += errorsHistory[i].errorCount;
+                }
+                alert("Historial cargado: " + totalErrors + " preguntas falladas hasta ahora.")
+            };
+            reader.readAsText(file);
+        }
+        function downloadHistory() {
+            download(JSON.stringify(errorsHistory), 'practicar-señales-historico.txt', 'text/plain');
+        }
+        function download(content, fileName, contentType) {
+            var a = document.createElement("a");
+            var file = new Blob([content], {type: contentType});
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+        }
+        function updateHistoryCookie() {
+            var d = new Date();
+            var year = d.getFullYear();
+            var month = d.getMonth();
+            var day = d.getDate();
+            var c = new Date(year + 1, month, day);
+            document.cookie = 'errorHistory='+ JSON.stringify(errorsHistory) +';expires=' + c + ';Secure';
+        }
         function checkHistoryCookie() {
-            var cookie = getCookie("myObj");
+            var cookie = getCookie("errorHistory");
+            if(cookie == "") { return; }
+
             var history = JSON.parse(cookie);
-            if(history != ""){
-                for(var i=0; i<history.length;i++){
-                    for(var j=0; j<signs.length;j++){
-                        if(signs[j].name === history[i].name){
-                            for(var k=0;k<history[i].errorCount;k++){
-                                signsQuestionnaire.push(signs[j]);
-                            }
+            if(history == ""){ return; }
+            for(var i=0; i<history.length;i++){
+                //Load historic errors
+                errorsHistory.push({ name: history[i].name, errorCount: history[i].errorCount})
+
+                for(var j=0; j<signs.length;j++){
+                    if(signs[j].name === history[i].name){
+                        //Add failed question to the pool for each time the user failed it, multiplying probability to get that question
+                        for(var k=0;k<history[i].errorCount;k++){
+                            signsQuestionnaire.push(signs[j]);
                         }
+                        
                     }
                 }
             }
