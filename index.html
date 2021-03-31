@@ -87,7 +87,7 @@
             { name: "Panel-Naranja", tag: "", text: "Medidas: 30*40*15 cm. Nº superior: representa la peligrosidad de la materia, la repetición de un número implica mayor peligrosidad y la X representa que reacciona violentamente con el agua. Los peligros son como exgalisocotorracodi, pero el di(9) es peligro de reacción violenta espontánea. El nº inferior representa el identificador de la materia o nº ONU."},
             { name: "Banda-naranja", tag: "", text: "En vagones cisterna destinados al transporte de gases liacuados, licuados refrigerados o disueltos. Banda no retrorreflectante que rodea la cisterna a media altura, 30cm de grosor."},
         ]
-        var sessionErrors = [];
+        var errorsHistory = [];
         var historyAnswers = [
             { name: "Botellas-butano-propano-2.1", tag: "Etiqueta 2.1", text: "Botellas de butano/propano (Gas inflamable)", errorCount: 0},
             { name: "Explosivos-divisiones-peligro-1.1", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3", errorCount: 0},
@@ -135,24 +135,27 @@
             if(!correctAnswer){
                 wrongAnswers++;
                 var signName = document.getElementById("sign-name").innerHTML;
-                sessionErrors.push({ name: signName, errorCount: 1});
-
-                //Pass to history
-                // for(var i =0; historyAnswers.length;i++){
-                //     if(historyAnswers[i].name == document.getElementById("sign-name").innerHTML){
-                //         historyAnswers[i].errorCount++;
-                //         break;
-                //     }
-                // }
-
+                
+                var foundInHistory=false;
+                for(var i=0; i<errorsHistory.length; i++){
+                    if(errorsHistory[i].name == signName){
+                        errorsHistory[i].errorCount++;
+                        foundInHistory = true;
+                        break;
+                    }
+                }
+                if(!foundInHistory){
+                    errorsHistory.push({ name: signName, errorCount: 1});
+                }
+                //Update cookie
                 var d = new Date();
                 var year = d.getFullYear();
                 var month = d.getMonth();
                 var day = d.getDate();
                 var c = new Date(year + 1, month, day);
                 
-                // Al guardar sessionErrors, si tengo un fallo de otra sesión en el histórico se elimina
-                document.cookie = 'myObj='+ JSON.stringify(sessionErrors) +';expires=' + c + ';Secure';
+                // Al guardar errorsHistory, si tengo un fallo de otra sesión en el histórico se elimina
+                document.cookie = 'errorHistory='+ JSON.stringify(errorsHistory) +';expires=' + c + ';Secure';
             }
             if(signsAnswered<totalSigns){
                 loadSign();
@@ -175,7 +178,6 @@
         function loadSign() {
             console.log(signsQuestionnaire);
             var randomIndex = Math.floor(Math.random() * signsQuestionnaire.length)
-            randomIndex = 0;
             var randomSign = signsQuestionnaire[randomIndex];
             var signName = randomSign.name;
             var src =MERC_PEL_PATH+randomSign.name+".png";
@@ -195,15 +197,25 @@
         }
 
         function checkHistoryCookie() {
-            var cookie = getCookie("myObj");
+            var cookie = getCookie("errorsHistory");
+            if(cookie == "")
+            {
+                return;
+            }
+
             var history = JSON.parse(cookie);
             if(history != ""){
                 for(var i=0; i<history.length;i++){
+                    //Load historic errors
+                    errorsHistory.push({ name: history[i].name, errorCount: history[i].errorCount})
+
                     for(var j=0; j<signs.length;j++){
                         if(signs[j].name === history[i].name){
+                            //Add failed question to the pool for each time the user failed it, multiplying probability to get that question
                             for(var k=0;k<history[i].errorCount;k++){
                                 signsQuestionnaire.push(signs[j]);
                             }
+                            
                         }
                     }
                 }
