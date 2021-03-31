@@ -33,12 +33,10 @@
         </script>
     </head>
     <body>
-        <form>
-            <input type="checkbox" id="merc_pel" name="merc_per" value="merc_per" checked disabled>
-            <label for="merc_pel">Mercancías peligrosas</label>
-            <input id="startButton" type="button" onclick="start(this)" value="Comenzar"> 
-        </form>
-
+        <input type="checkbox" id="merc_pel" name="merc_per" value="merc_per" checked disabled hidden>
+        <label for="merc_pel" hidden>Mercancías peligrosas</label>
+        <h1>Ponte a prueba</h1>
+        <input id="startButton" type="button" onclick="start(this)" value="Comenzar"> 
         <div id="questions" style="display: none;">
             <div>
                 <label>¿Qué representa esta señal?</label>
@@ -64,9 +62,19 @@
             <input type="button" onclick="restart()" value="Nuevo intento">  
         </div>
         <div>
-            <input type="file" id="uploadHistory" name="filename"> 
-            <label for="uploadHistory">Cargar historial desde fichero</label>
-            <input type="button" onclick="downloadHistory()" value="Guardar historial en fichero">  
+            <h1>Historial</h1>
+            <h2>¿Qué es esto?</h2>
+            <p>Si te da pereza leer no hace falta que sigas, puedes seguir usando la aplicación como antes.</p>
+            <p>Ahora cada vez que marques una respuesta como error esta web lo guardará en una cookie en tu navegador.</p>
+            <p>Cada vez que entres en esta web, leeré la información de dicha cookie y por cada error que tengas en una pregunta será más probable que te la pregunte.</p>
+            <p>Pero las cookies se pueden eliminar de distintas maneras, así que te doy la opción de guardar todos tus fallos en un fichero de texto.
+                Así tienes un mejor control sobre tus datos, puedes descargarlo para utilizar esta web en otro navegador o dispositivo sin perder tu información.
+            </p>
+            <div>
+                <label for="uploadHistory">Cargar historial desde fichero</label>
+                <input type="file" id="uploadHistory" name="filename"> 
+            </div>  
+            <div><input type="button" onclick="downloadHistory()" value="Guardar historial en fichero">  </div>
         </div>
         <footer>
             <div>Copyright (C) 2021  Pablo Lilao Chinchilla</div>
@@ -167,11 +175,7 @@
                 var foundInHistory=false;
                 for(var i=0; i<errorsHistory.length; i++){
                     if(errorsHistory[i].name == signName){
-                        console.log(signName);
-                        console.log(errorsHistory[i].name);
-                        
                         errorsHistory[i].errorCount++;
-                        console.log(errorsHistory[i].errorCount);
                         foundInHistory = true;
                         break;
                     }
@@ -231,6 +235,11 @@
                 var contents = e.target.result;
                 errorsHistory = JSON.parse(contents)
                 updateHistoryCookie();
+                var totalErrors=0;
+                for(var i=0; i<errorsHistory.length; i++){
+                    totalErrors += errorsHistory[i].errorCount;
+                }
+                alert("Historial cargado: " + totalErrors + " preguntas falladas hasta ahora.")
             };
             reader.readAsText(file);
         }
