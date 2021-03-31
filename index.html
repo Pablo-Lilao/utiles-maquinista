@@ -71,15 +71,11 @@
         <footer>
             <div>Copyright (C) 2021  Pablo Lilao Chinchilla</div>
             <div>GNU GPL version 3</div>
-            <div>Imágenes obtenidas de distintos libros de formación</div>
+            <div hidden>Imágenes obtenidas de distintos libros de formación</div>
         </footer>
     </body>
     <script>
         const MERC_PEL_PATH="img/merc-pel/";
-        var mercPelImgNames=[
-            "Botellas-butano-propano-2.1",
-            "Explosivos-divisiones-peligro-1.1"
-        ];
         var signs = [
             { name: "Explosivos-divisiones-peligro-1.1", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
             { name: "Explosivos-divisiones-peligro-1.2", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
@@ -125,11 +121,6 @@
             { name: "Banda-naranja", tag: "", text: "En vagones cisterna destinados al transporte de gases liacuados, licuados refrigerados o disueltos. Banda no retrorreflectante que rodea la cisterna a media altura, 30cm de grosor."},
         ]
         var errorsHistory = [];
-        var historyAnswers = [
-            { name: "Botellas-butano-propano-2.1", tag: "Etiqueta 2.1", text: "Botellas de butano/propano (Gas inflamable)", errorCount: 0},
-            { name: "Explosivos-divisiones-peligro-1.1", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3", errorCount: 0},
-            { name: "Liquido-inflamable-3(1)", tag: "Etiqueta 3", errorCount: 0}
-        ]
         var verSolucion = false;
         var signsAnswered=0;
         var wrongAnswers=0;
