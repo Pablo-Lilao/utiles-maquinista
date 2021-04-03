@@ -33,8 +33,12 @@
         </script>
     </head>
     <body>
-        <input type="checkbox" id="merc_pel" name="merc_per" value="merc_per" checked disabled hidden>
-        <label for="merc_pel" hidden>Mercancías peligrosas</label>
+        <form id="init_questionnaire_form">
+            <input type="radio" id="merc_pel" name="questions" value="merc_pel">
+            <label for="merc_pel">Mercancías peligrosas</label><br>
+            <input type="radio" id="fund" name="questions" value="fund">
+            <label for="fund">Señales fundamentales</label><br>
+        </form>
         <h1>Ponte a prueba</h1>
         <input id="startButton" type="button" onclick="start(this)" value="Comenzar"> 
         <div id="questions" style="display: none;">
@@ -83,8 +87,7 @@
         </footer>
     </body>
     <script>
-        const MERC_PEL_PATH="img/merc-pel/";
-        var signs = [
+        var mercPelSigns = [
             { name: "Explosivos-divisiones-peligro-1.1", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
             { name: "Explosivos-divisiones-peligro-1.2", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
             { name: "Explosivos-divisiones-peligro-1.3", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
@@ -128,12 +131,35 @@
             { name: "Panel-naranja", tag: "", text: "Medidas: 30*40*15 cm. Nº superior: representa la peligrosidad de la materia, la repetición de un número implica mayor peligrosidad y la X representa que reacciona violentamente con el agua. Los peligros son como exgalisocotorracodi, pero el di(9) es peligro de reacción violenta espontánea. El nº inferior representa el identificador de la materia o nº ONU."},
             { name: "Banda-naranja", tag: "", text: "En vagones cisterna destinados al transporte de gases liacuados, licuados refrigerados o disueltos. Banda no retrorreflectante que rodea la cisterna a media altura, 30cm de grosor."},
         ]
+        var fundSings = [
+            { name: "FF1A - Pág. 50", text: "Vía libre"},
+            { name: "FF2 - Pág. 50", text: "Vía libre condicional"},
+            { name: "FF3A - Pág. 50", text: "Anuncio de precaución"},
+            { name: "FF3B - Pág. 50", text: "Anuncio de precaución"},
+            { name: "FF3C - Pág. 50", text: "Anuncio de precaución"},
+            { name: "FF4 - Pág. 51", text: "Preanuncio de parada"},
+            { name: "FF5A - Pág. 51", text: "Anuncio de parada"},
+            { name: "FF5B - Pág. 51", text: "Anuncio de parada"},
+            { name: "FF6 - Pág. 52", text: "Anuncio de parada inmediata"},
+            { name: "FF7A - Pág. 52", text: "Parada"},
+            { name: "FF7B - Pág. 52", text: "Parada"},
+            { name: "FF7C - Pág. 53", text: "Parada selectiva"},
+            { name: "FF7D - Pág. 53", text: "Parada selectiva"},
+            { name: "FF8A - Pág. 54", text: "Rebase autorizado"},
+            { name: "FF8B - Pág. 54", text: "Rebase autorizado"},
+            { name: "FF8C - Pág. 54", text: "Rebase autorizado"},
+            { name: "FF9 - Pág. 55", text: "Movimiento autorizado"},
+            { name: "FF10A - Pág. 55", text: "Paso a nivel protegido"},
+            { name: "FF10B - Pág. 55", text: "Paso a nivel protegido"},
+            { name: "FF11A - Pág. 56", text: "Paso a nivel sin protección"},
+        ]
         var errorsHistory = [];
         var verSolucion = false;
         var signsAnswered=0;
         var wrongAnswers=0;
-        var totalSigns=signs.length;
+        var totalSigns=0;
         var signsQuestionnaire = [];
+        var testSelection="";
 
         checkHistoryCookie();
 
@@ -142,11 +168,29 @@
             button.disabled = true;
             signsAnswered=0;
             wrongAnswers=0;
-            for(var i=0;i<signs.length;i++){
-                signsQuestionnaire.push(signs[i]);
-            }
+            initQuestionnaire();
             toggle(document.getElementById("questions"));
             loadSign();
+        }
+        function initQuestionnaire() {
+            var form = document.getElementById("init_questionnaire_form");
+            for(var i=0; i<form.children.length;i++){
+                if(form.children[i].id=="merc_pel" && form.children[i].checked == true){
+                    testSelection="merc_pel"
+                    for(var i=0;i<mercPelSigns.length;i++){
+                        signsQuestionnaire.push(mercPelSigns[i]);
+                    }
+                    break;
+                }
+                else if(form.children[i].id=="fund" && form.children[i].checked == true){
+                    testSelection="fund"
+                    for(var i=0;i<fundSings.length;i++){
+                        signsQuestionnaire.push(fundSings[i]);
+                    }
+                    break;
+                }
+            }
+            totalSigns = signsQuestionnaire.length;
         }
         function restart() {
             document.getElementById("startButton").disabled = false;
@@ -204,11 +248,10 @@
         }
 
         function loadSign() {
-            console.log(signsQuestionnaire);
             var randomIndex = Math.floor(Math.random() * signsQuestionnaire.length)
             var randomSign = signsQuestionnaire[randomIndex];
             var signName = randomSign.name;
-            var src =MERC_PEL_PATH+randomSign.name+".jpg";
+            var src ="img/"+ testSelection + "/" +randomSign.name+".jpg";
             document.getElementById("img-senal").src = src;
             document.getElementById("solucion").innerHTML = randomSign.text;
             document.getElementById("sign-name").innerHTML = randomSign.name;
