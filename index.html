@@ -4,7 +4,8 @@
         <title>Practicar señales</title>
         <meta name="description" content="Practicar señales ferroviarias">
         <link rel="stylesheeet" type="text/css" href="style.css">
-
+        <script src="js/mercPel.js"></script>
+        <script src="js/fundSigns.js"></script>
         <script>
             /*    
             @licstart  The following is the entire license notice for the 
@@ -36,7 +37,7 @@
         <form id="init_questionnaire_form">
             <input type="radio" id="merc_pel" name="questions" value="merc_pel">
             <label for="merc_pel">Mercancías peligrosas</label><br>
-            <input type="radio" id="fund" name="questions" value="fund">
+            <input type="radio" id="fund" name="questions" value="fund" checked>
             <label for="fund">Señales fundamentales</label><br>
             <input type="radio" id="transitorias" name="questions" value="transitorias">
             <label for="transitorias">Señales transitorias</label><br>
@@ -89,72 +90,6 @@
         </footer>
     </body>
     <script>
-        var mercPelSigns = [
-            { name: "Explosivos-divisiones-peligro-1.1", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
-            { name: "Explosivos-divisiones-peligro-1.2", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
-            { name: "Explosivos-divisiones-peligro-1.3", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
-            { name: "Explosivo-1.4", tag: "Etiqueta 1.4", text: "Explosivo"},
-            { name: "Explosivo-1.5", tag: "Etiqueta 1.5", text: "Explosivo"},
-            { name: "Explosivo-1.6", tag: "Etiqueta 1.6", text: "Explosivo"},
-            { name: "Botellas-butano-propano-2.1", tag: "Etiqueta 2.1", text: "Botellas de butano/propano (Gas inflamable)"},
-            { name: "Gas-inflamable-2.1(1)", tag: "Etiqueta 2.1", text: "Gas inflamable"},
-            { name: "Gas-inflamable-2.1(2)", tag: "Etiqueta 2.1", text: "Gas inflamable"},
-            { name: "Gas-noinflamable-notoxico-2.2.(1)", tag: "Etiqueta 2.2", text: "Gas no inflamable y no tóxico"},
-            { name: "Gas-noinflamable-notoxico-2.2.(2)", tag: "Etiqueta 2.2", text: "Gas no inflamable y no tóxico"},
-            { name: "Gas-toxico-2.3", tag: "Etiqueta 2.3", text: "Gas tóxico"},
-            { name: "Liquido-inflamable-3(1)", tag: "Etiqueta 3", text: "Líquido inflamable"},
-            { name: "Liquido-inflamable-3(2)", tag: "Etiqueta 3", text: "Líquido inflamable"},
-            { name: "Solido-inflamable-Auto-Ex-Des-4.1", tag: "Etiqueta 4.1", text: "Sólido inflamable autorreactiva y explosiva desensibilizada sólida"},
-            { name: "Solido-inflamacion-espontanea-4.2", tag: "Etiqueta 4.2", text: "Inflamación espontánea"},
-            { name: "Gas-Inflamable-Contacto-Agua-4.3(1)", tag: "Etiqueta 4.3", text: "Reacciona al agua produciendo gas inflamable"},
-            { name: "Gas-Inflamable-Contacto-Agua-4.3(2)", tag: "Etiqueta 4.3", text: "Reacciona al agua produciendo gas inflamable"},
-            { name: "Comburente-5.1", tag: "Etiqueta 5.1", text: "Comburente"},
-            { name: "Peroxido-organico-5.1-2005", tag: "Etiqueta 5.2", text: "Peróxido orgánico"},
-            { name: "Peroxido-organico-5.2-2007(1)", tag: "Etiqueta 5.2", text: "Peróxido orgánico"},
-            { name: "Peroxido-organico-5.2-2007(2)", tag: "Etiqueta 5.2", text: "Peróxido orgánico"},
-            { name: "Toxico-6.1", tag: "Etiqueta 6.1", text: "Tóxico"},
-            { name: "Infeccioso-6.2", tag: "Etiqueta 6.2", text: "Infeccioso"},
-            { name: "Radiactivo-exento-7A", tag: "Etiqueta 7A", text: "Radiactivo exento"},
-            { name: "Radiactivo-7B", tag: "Etiqueta 7B", text: "Radiactivo"},
-            { name: "Radiactivo-7C", tag: "Etiqueta 7C", text: "Radiactivo"},
-            { name: "Fisionable-7E", tag: "Etiqueta 7E", text: "Fisionable"},
-            { name: "Radiactivo-Vehiculo-7D", tag: "Etiqueta 7D", text: "Radiactivo vehículo"},
-            { name: "Corrosivo-8", tag: "Etiqueta 8", text: "Corrosivo"},
-            { name: "Otros-peligros-9", tag: "Diversos (9)", text: "Otros peligros"},
-            { name: "Bulto-exento-Carga-general", tag: "Diversos (9)", text: "Bulto exento del RID. Carga general"},
-            { name: "Orientacion-bulto", tag: "Diversos (9)", text: "Orientación del bulto. Obligatorio para: Embalajes combinados con envases interiores que contengan líquidos, envases y embalajes simples con orificios de ventilación, recipientes criógenicos específicos para el transporte de gas licuado refrigerado y máquinas o aparatos que contengan mercancías peligrosas líquidas cuando deba mantenerse en una orientación determinada"},
-            { name: "Sobreembalaje", tag: "Diversos (9)", text: "Sobreembalaje"},
-            { name: "Mercancia-en-caliente", tag: "Diversos (9)", text: "Mercancía transportada en caliente. Para temperaturas >100ºC si son líquidos y >240ºC si son sólidos"},
-            { name: "Unidad-sometida-a-fumigacion", tag: "Diversos (9)", text: "Unidad sometida a fumigación"},
-            { name: "Manipular-con-precaucion-13", tag: "Diversos (9)", text: "Maniobras ferrocarril. Manipular con precaución."},
-            { name: "Prohibida-clasificacion-lanzamiento-o-gravedad", tag: "Diversos (9)", text: "Prohibida clasificación por lanzamiento o gravedad"},
-            { name: "Peligro-medio-ambiente", tag: "", text: "Materia peligrosa para el medio ambiente"},
-            { name: "Peligro-refrigeracion", tag: "", text: "Riesgo de asfixia por materiales peligrosos usados para refrigeración"},
-            { name: "Panel-naranja", tag: "", text: "Medidas: 30*40*15 cm. Nº superior: representa la peligrosidad de la materia, la repetición de un número implica mayor peligrosidad y la X representa que reacciona violentamente con el agua. Los peligros son como exgalisocotorracodi, pero el di(9) es peligro de reacción violenta espontánea. El nº inferior representa el identificador de la materia o nº ONU."},
-            { name: "Banda-naranja", tag: "", text: "En vagones cisterna destinados al transporte de gases liacuados, licuados refrigerados o disueltos. Banda no retrorreflectante que rodea la cisterna a media altura, 30cm de grosor."},
-        ]
-        var fundSings = [
-            { name: "FF1A - Pág. 50", text: "Vía libre"},
-            { name: "FF2 - Pág. 50", text: "Vía libre condicional"},
-            { name: "FF3A - Pág. 50", text: "Anuncio de precaución"},
-            { name: "FF3B - Pág. 50", text: "Anuncio de precaución"},
-            { name: "FF3C - Pág. 50", text: "Anuncio de precaución"},
-            { name: "FF4 - Pág. 51", text: "Preanuncio de parada"},
-            { name: "FF5A - Pág. 51", text: "Anuncio de parada"},
-            { name: "FF5B - Pág. 51", text: "Anuncio de parada"},
-            { name: "FF6 - Pág. 52", text: "Anuncio de parada inmediata"},
-            { name: "FF7A - Pág. 52", text: "Parada"},
-            { name: "FF7B - Pág. 52", text: "Parada"},
-            { name: "FF7C - Pág. 53", text: "Parada selectiva"},
-            { name: "FF7D - Pág. 53", text: "Parada selectiva"},
-            { name: "FF8A - Pág. 54", text: "Rebase autorizado"},
-            { name: "FF8B - Pág. 54", text: "Rebase autorizado"},
-            { name: "FF8C - Pág. 54", text: "Rebase autorizado"},
-            { name: "FF9 - Pág. 55", text: "Movimiento autorizado"},
-            { name: "FF10A - Pág. 55", text: "Paso a nivel protegido"},
-            { name: "FF10B - Pág. 55", text: "Paso a nivel protegido"},
-            { name: "FF11A - Pág. 56", text: "Paso a nivel sin protección"},
-        ]
         var transitoriaSigns = [
             { name: "FF1B - Pág. 88", text: "Vía libre"},
             { name: "FF1C - Pág. 88", text: "Vía libre"},
@@ -224,7 +159,7 @@
             { name: "FF10C - Pág. 107", text: "Paso a nivel protegido"},
             { name: "FF11B - Pág. 108", text: "Paso a nivel sin protección"},
             { name: "FI17A - Pág. 108", text: "Indicadora de precaución luminosa:"},
-            { name: "FF17B - Pág. 108", text: "Indicadora de precaución (pantalla)"},
+            { name: "FI17B - Pág. 108", text: "Indicadora de precaución (pantalla)"},
             { name: "FI12A - Pág. 109", text: "Indicador de conexión al circuito telefónico: poste dotado de conector a la intemperie."},
             { name: "FI12B - Pág. 109", text: "Indicador de conexión al circuito telefónico: poste no dotado de conector a la intemperie. La flecha indica la dirección del poste más próximo."},
             { name: "FI15AÑ - Pág. 109", text: "Indica proximidad de un desvío en plena vía a tomar de talón a la distancia indicada."},
@@ -281,7 +216,7 @@
             var form = document.getElementById("init_questionnaire_form");
             for(var i=0; i<form.children.length;i++){
                 if(form.children[i].id=="merc_pel" && form.children[i].checked == true){
-                    testSelection="merc_pel"
+                    testSelection=mercPelFolderName;
                     for(var i=0;i<mercPelSigns.length;i++){
                         signsQuestionnaire.push(mercPelSigns[i]);
                     }
@@ -426,8 +361,8 @@
                 //Load historic errors
                 errorsHistory.push({ name: history[i].name, errorCount: history[i].errorCount})
 
-                for(var j=0; j<signs.length;j++){
-                    if(signs[j].name === history[i].name){
+                for(var j=0; j<signsQuestionnaire.length;j++){
+                    if(signsQuestionnaire[j].name === history[i].name){
                         //Add failed question to the pool for each time the user failed it, multiplying probability to get that question
                         for(var k=0;k<history[i].errorCount;k++){
                             signsQuestionnaire.push(signs[j]);
