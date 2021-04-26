@@ -1,3 +1,4 @@
+const FUND_FOLDER_NAME = "fund";
 var fundSings = [
     { name: "FF1A - Pág. 50", text: "Vía libre"},
     { name: "FF2 - Pág. 50", text: "Vía libre condicional"},

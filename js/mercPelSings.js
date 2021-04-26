@@ -1,4 +1,4 @@
-const mercPelFolderName = "merc-pel";
+const MERC_PEL_FOLDER_NAME = "merc-pel";
 var mercPelSigns = [
     { name: "Explosivos-divisiones-peligro-1.1", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
     { name: "Explosivos-divisiones-peligro-1.2", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
