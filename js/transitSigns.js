@@ -1,5 +1,45 @@
+function addTransitSigns() {
+    signs = [];
+    for(var i=0; i<CHECKBOX_LIST.length;i++){
+        var checkbox = document.getElementById(CHECKBOX_LIST[i]);
+        if(!checkbox){
+            continue;
+        }
+        if(!checkbox.checked){
+            continue;
+        }
+        var listedSings=[];
+        switch (CHECKBOX_LIST[i]) {
+            case "fundamentales":
+                listedSings=fundSings;
+                break;
+            case "indicadoras":
+                listedSings=indSings;
+                break;
+            case "maniobras":
+                listedSings=mbrSings;
+                break;
+            case "freno":
+                listedSings=frenoSigns;
+                break;
+            case "ram":
+                listedSings=ramSigns;
+                break;
+            case "perpignan":
+                listedSings=perpignanSigns;
+                break;
+        
+            default:
+                break;
+        }
+        for(var j=0; j<listedSings.length;j++){
+            signs.push(listedSings[j]);
+        }
+    }
+    return signs;
+}
 const TRANSIT_FOLDER_NAME = "transitorias";
-var transitoriaSigns = [
+var fundSings = [
     { name: "FF1B - Pág. 88", text: "Vía libre"},
     { name: "FF1C - Pág. 88", text: "Vía libre"},
     { name: "FF1D - Pág. 88", text: "Vía libre"},
@@ -19,7 +59,8 @@ var transitoriaSigns = [
     { name: "FF9B - Pág. 91", text: "Movimiento autorizado"},
     { name: "FF12A - Pág. 90", text: "Parada diferida"},
     { name: "FF12B - Pág. 90", text: "Parada diferida"},
-    //INDICADORAS
+]
+var indSings = [
     { name: "FI16 - Pág. 92", text: "Poste de punto protegido"},
     { name: "FI3E - Pág. 92", text: "Indicadora de dirección de día y noche, indicando vía directa."},
     { name: "FI3F - Pág. 92", text: "Indicadora de dirección de día y noche, indicando desvío a la izquierda."},
@@ -36,9 +77,9 @@ var transitoriaSigns = [
     { name: "FI4F_2 - Pág. 93", text: "Indicadora de posición de aguja de noche, indicando desvío a la derecha"},
     { name: "FI4G - Pág. 93", text: "Indicadora de posición de aguja de día, indicando desvío a la izquierda"},
     { name: "FI4G_2 - Pág. 93", text: "Indicadora de posición de aguja de noche, indicando desvío a la izquierda."},
-
-    { name: "FI9D - Pág. 94", text: "Poste de punto protegido. Se instala a lo largo de la línea. La flecha indica la dirección en que se encuentra la estación más próxima."},
-    //PORTÁTILES
+    { name: "FI9D - Pág. 94", text: "Poste de punto protegido. Se instala a lo largo de la línea. La flecha indica la dirección en que se encuentra la estación más próxima."}
+]
+var mbrSings = [
     { name: "P4A - Pág. 102", text: "En maniobras Tirar"},
     { name: "P4B - Pág. 102", text: "En maniobras Tirar"},
     { name: "P4C - Pág. 102", text: "En maniobras Empujar"},
@@ -48,8 +89,9 @@ var transitoriaSigns = [
     { name: "P4G - Pág. 102", text: "En maniobras Reducir la marcha o empujar despacio"},
     { name: "P4H - Pág. 102", text: "En maniobras Reducir la marcha o empujar despacio"},
     { name: "P4I - Pág. 102", text: "En maniobras Parar"},
-    { name: "P4J - Pág. 102", text: "En maniobras Parar"},
-    //PRUEBAS DE FRENO
+    { name: "P4J - Pág. 102", text: "En maniobras Parar"}
+]
+var frenoSigns = [
     { name: "P5A - Pág. 103", text: "Apretar frenos"},
     { name: "P5B - Pág. 103", text: "Apretar frenos"},
     { name: "P5C - Pág. 103", text: "Apretar frenos"},
@@ -60,11 +102,7 @@ var transitoriaSigns = [
     { name: "P5H - Pág. 103", text: "Prueba de frenos Terminada"},
     { name: "P5I - Pág. 103", text: "Prueba de frenos Terminada"},
     { name: "P5J - Pág. 103", text: "Prueba de frenos Anormal"},
-    { name: "P5K - Pág. 103", text: "Prueba de frenos Anormal"},
-    //LZB
-    { name: "FF7I - Pág. 106", text: "En la línea Alta Velocidad Madrid-Sevilla ordena parar ante ella sin rebasarla. Para los trenes con LZB, la señalización en cabina prevalece sobre la indicación de la señal."},
-    //RAM
-    
+    { name: "P5K - Pág. 103", text: "Prueba de frenos Anormal"}
 ]
 var ramSigns = [
     { name: "FF10C - Pág. 107", text: "Paso a nivel protegido"},
@@ -78,6 +116,8 @@ var ramSigns = [
     { name: "FI15AO - Pág. 109", text: "Indica proximidad de un desvío en plena vía a tomar de punta a la distancia indicada."},
     { name: "FI15AP - Pág. 109", text: "Indica El punto en el que el maquinista debe iniciar el frenado del tren, en las condiciones que se determinen por Consigna."},
     { name: "FI15AQ - Pág. 109", text: "Indica el punto en que finaliza el circuito de vía que afecta a las agujas y que debe quedar libre en las maniobras que afecten a la aguja o agujas que señala."},
+    // LZB
+    { name: "FF7I - Pág. 106", text: "En la línea Alta Velocidad Madrid-Sevilla ordena parar ante ella sin rebasarla. Para los trenes con LZB, la señalización en cabina prevalece sobre la indicación de la señal."},
 ]
 var perpignanSigns = [
     { name: "SIB1 - Pág. 112", text: "Señal de bloqueo. Protección no franqueable."},
@@ -106,4 +146,4 @@ var perpignanSigns = [
     { name: "SII10 - Pág. 116", text: "Señal de las instalaciones. Señal de final de la catenaria. Indica el punto límite que los vehículos de tracción eléctrica no deben rebasar."}
 ]
 
-const CHECKBOX_LIST=["fundamentales", "indicadoras", "portatiles", "freno", "ram", "perpignan"]
+const CHECKBOX_LIST=["fundamentales", "indicadoras", "maniobras", "freno", "ram", "perpignan"]

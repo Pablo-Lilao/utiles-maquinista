@@ -59,17 +59,16 @@
                             <label for="indicadoras">Indicadoras</label>
                         </li>
                         <li>
-                            <input type="checkbox" id="portatiles" name="portatiles" value="portatiles" checked>
-                            <label for="portatiles">Portátiles</label>
+                            <input type="checkbox" id="maniobras" name="maniobras" value="maniobras" checked>
+                            <label for="maniobras">Maniobras</label>
                         </li>
                         <li>
                             <input type="checkbox" id="freno" name="freno" value="freno" checked>
                             <label for="freno">Pruebas de freno</label>
                         </li>
-                        <li>LZB</li>
                         <li>
                             <input type="checkbox" id="ram" name="ram" value="RAM" checked>
-                            <label for="ram">RAM</label>
+                            <label for="ram">RAM + LZB</label>
                         </li>
                         <li>
                             <input type="checkbox" id="perpignan" name="perpignan" value="Perpignan" checked>
@@ -330,36 +329,6 @@
                 }
             }
             return "";
-        }
-       
-        // TRANSIT SIGNS CODE
-        function addTransitSigns() {
-            signs = [];
-            for(var i=0; i<CHECKBOX_LIST.length;i++){
-                var checkbox = document.getElementById(CHECKBOX_LIST[i]);
-                if(!checkbox){
-                    continue;
-                }
-                if(!checkbox.checked){
-                    continue;
-                }
-                var listedSings=[];
-                switch (CHECKBOX_LIST[i]) {
-                    case "ram":
-                        listedSings=ramSigns;
-                        break;
-                    case "perpignan":
-                        listedSings=perpignanSigns;
-                        break;
-                
-                    default:
-                        break;
-                }
-                for(var j=0; j<listedSings.length;j++){
-                    signs.push(listedSings[j]);
-                }
-            }
-            return signs;
         }
     </script>
 </html>
