@@ -81,6 +81,9 @@
         </form>
         <h1>Ponte a prueba</h1>
         <input id="startButton" type="button" onclick="start(this)" value="Comenzar"> 
+        <div id="quiestionnaire-progress" style="display: none;">
+            <label>Pregunta: x/y </label>
+        </div>
         <div id="questions" style="display: none;">
             <div>
                 <label>¿Qué representa esta señal?</label>
@@ -147,6 +150,9 @@
             signsAnswered=0;
             wrongAnswers=0;
             initQuestionnaire();
+            $("#quiestionnaire-progress").css('display', 'block');
+            $("#quiestionnaire-progress").children()[0].innerHTML = "Pregunta: " + signsAnswered + " / " + totalSigns;
+            //$("#quiestionnaire-progress").get(0).tagName.toLowerCase()
             toggle(document.getElementById("questions"));
             loadSign();
         }
@@ -197,6 +203,7 @@
         }
         function next(correctAnswer) {
             signsAnswered++;
+            $("#quiestionnaire-progress").children()[0].innerHTML = "Pregunta: " + signsAnswered + " / " + totalSigns;
             if(!correctAnswer){
                 wrongAnswers++;
                 var signName = document.getElementById("sign-name").innerHTML;
