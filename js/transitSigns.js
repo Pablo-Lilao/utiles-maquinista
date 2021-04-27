@@ -11,7 +11,7 @@ function addTransitSigns() {
         var listedSings=[];
         switch (CHECKBOX_LIST[i]) {
             case "fundamentales":
-                listedSings=fundSings;
+                listedSings=transitFundSings;
                 break;
             case "indicadoras":
                 listedSings=indSings;
@@ -28,7 +28,6 @@ function addTransitSigns() {
             case "perpignan":
                 listedSings=perpignanSigns;
                 break;
-        
             default:
                 break;
         }
@@ -38,8 +37,8 @@ function addTransitSigns() {
     }
     return signs;
 }
-const TRANSIT_FOLDER_NAME = "transitorias";
-var fundSings = [
+const TRANSIT_FOLDER_NAME = "lib2";
+var transitFundSings = [
     { name: "FF1B - Pág. 88", text: "Vía libre"},
     { name: "FF1C - Pág. 88", text: "Vía libre"},
     { name: "FF1D - Pág. 88", text: "Vía libre"},

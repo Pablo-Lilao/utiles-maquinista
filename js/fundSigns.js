@@ -1,4 +1,4 @@
-const FUND_FOLDER_NAME = "fund";
+const FUND_FOLDER_NAME = "lib2";
 var fundSings = [
     { name: "FF1A - Pág. 50", text: "Vía libre"},
     { name: "FF2 - Pág. 50", text: "Vía libre condicional"},

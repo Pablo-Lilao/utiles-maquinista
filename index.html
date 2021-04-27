@@ -48,7 +48,7 @@
                 </li>
                 <li>
                     <input type="radio" id="transitorias" name="questions" value="transitorias">
-                    <label for="transitorias">Señales transitorias</label>
+                    <label for="transitorias">Señales transitorias (Si no está marcada se ignoran las subcasillas)</label>
                     <ul>
                         <li>
                             <input type="checkbox" id="fundamentales" name="fundamentales" value="Fundamentales" checked>
@@ -122,6 +122,19 @@
             </div>  
             <div><input type="button" onclick="downloadHistory()" value="Guardar historial en fichero">  </div>
         </div>
+        <div>
+            <h1>Créditos</h1>
+            <ul>
+                <li>
+                    Imágenes
+                    <ul>
+                        <li>Sergio Campos</li>
+                        <li>Pablo Lilao</li>
+                    </ul>
+                </li>
+                <li>Programación - Pablo Lilao</li>
+            </ul>
+        </div>
         <footer>
             <div>Copyright (C) 2021  Pablo Lilao Chinchilla</div>
             <div>GNU GPL version 3</div>
@@ -172,6 +185,7 @@
                     for(var i=0;i<fundSings.length;i++){
                         signsQuestionnaire.push(fundSings[i]);
                     }
+                    console.log(fundSings);
                     break;
                 }
                 else if(child.id=="transitorias" && child.checked == true){
@@ -311,7 +325,6 @@
                         for(var k=0;k<history[i].errorCount;k++){
                             signsQuestionnaire.push(signs[j]);
                         }
-                        
                     }
                 }
             }
