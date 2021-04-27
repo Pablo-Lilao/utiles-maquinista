@@ -4,7 +4,10 @@
         <title>Practicar señales</title>
         <meta name="description" content="Practicar señales ferroviarias">
         <link rel="stylesheeet" type="text/css" href="style.css">
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="js/mercPelSings.js"></script>
+        <script src="js/fundSigns.js"></script>
+        <script src="js/transitSigns.js"></script>
         <script>
             /*    
             @licstart  The following is the entire license notice for the 
@@ -34,13 +37,52 @@
     </head>
     <body>
         <form id="init_questionnaire_form">
-            <input type="radio" id="merc_pel" name="questions" value="merc_pel">
-            <label for="merc_pel">Mercancías peligrosas</label><br>
-            <input type="radio" id="fund" name="questions" value="fund">
-            <label for="fund">Señales fundamentales</label><br>
+            <ul>
+                <li>
+                    <input type="radio" id="merc_pel" name="questions" value="merc_pel">
+                    <label for="merc_pel">Mercancías peligrosas</label>
+                </li>
+                <li>
+                    <input type="radio" id="fund" name="questions" value="fund" checked>
+                    <label for="fund">Señales fundamentales</label>
+                </li>
+                <li>
+                    <input type="radio" id="transitorias" name="questions" value="transitorias">
+                    <label for="transitorias">Señales transitorias (Si no está marcada se ignoran las subcasillas)</label>
+                    <ul>
+                        <li>
+                            <input type="checkbox" id="fundamentales" name="fundamentales" value="Fundamentales" checked>
+                            <label for="fundamentales">Fundamentales</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="indicadoras" name="indicadoras" value="indicadoras" checked>
+                            <label for="indicadoras">Indicadoras</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="maniobras" name="maniobras" value="maniobras" checked>
+                            <label for="maniobras">Maniobras</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="freno" name="freno" value="freno" checked>
+                            <label for="freno">Pruebas de freno</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="ram" name="ram" value="RAM" checked>
+                            <label for="ram">RAM + LZB</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="perpignan" name="perpignan" value="Perpignan" checked>
+                            <label for="perpignan">Perpignan</label>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </form>
         <h1>Ponte a prueba</h1>
         <input id="startButton" type="button" onclick="start(this)" value="Comenzar"> 
+        <div id="quiestionnaire-progress" style="display: none;">
+            <label>Pregunta: x/y </label>
+        </div>
         <div id="questions" style="display: none;">
             <div>
                 <label>¿Qué representa esta señal?</label>
@@ -80,6 +122,19 @@
             </div>  
             <div><input type="button" onclick="downloadHistory()" value="Guardar historial en fichero">  </div>
         </div>
+        <div>
+            <h1>Créditos</h1>
+            <ul>
+                <li>
+                    Imágenes
+                    <ul>
+                        <li>Sergio Campos</li>
+                        <li>Pablo Lilao</li>
+                    </ul>
+                </li>
+                <li>Programación - Pablo Lilao</li>
+            </ul>
+        </div>
         <footer>
             <div>Copyright (C) 2021  Pablo Lilao Chinchilla</div>
             <div>GNU GPL version 3</div>
@@ -87,106 +142,55 @@
         </footer>
     </body>
     <script>
-        var mercPelSigns = [
-            { name: "Explosivos-divisiones-peligro-1.1", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
-            { name: "Explosivos-divisiones-peligro-1.2", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
-            { name: "Explosivos-divisiones-peligro-1.3", tag: "Etiqueta 1", text: "Explosivo de las Divisiones de Peligro 1.1, 1.2 y 1.3"},
-            { name: "Explosivo-1.4", tag: "Etiqueta 1.4", text: "Explosivo"},
-            { name: "Explosivo-1.5", tag: "Etiqueta 1.5", text: "Explosivo"},
-            { name: "Explosivo-1.6", tag: "Etiqueta 1.6", text: "Explosivo"},
-            { name: "Botellas-butano-propano-2.1", tag: "Etiqueta 2.1", text: "Botellas de butano/propano (Gas inflamable)"},
-            { name: "Gas-inflamable-2.1(1)", tag: "Etiqueta 2.1", text: "Gas inflamable"},
-            { name: "Gas-inflamable-2.1(2)", tag: "Etiqueta 2.1", text: "Gas inflamable"},
-            { name: "Gas-noinflamable-notoxico-2.2.(1)", tag: "Etiqueta 2.2", text: "Gas no inflamable y no tóxico"},
-            { name: "Gas-noinflamable-notoxico-2.2.(2)", tag: "Etiqueta 2.2", text: "Gas no inflamable y no tóxico"},
-            { name: "Gas-toxico-2.3", tag: "Etiqueta 2.3", text: "Gas tóxico"},
-            { name: "Liquido-inflamable-3(1)", tag: "Etiqueta 3", text: "Líquido inflamable"},
-            { name: "Liquido-inflamable-3(2)", tag: "Etiqueta 3", text: "Líquido inflamable"},
-            { name: "Solido-inflamable-Auto-Ex-Des-4.1", tag: "Etiqueta 4.1", text: "Sólido inflamable autorreactiva y explosiva desensibilizada sólida"},
-            { name: "Solido-inflamacion-espontanea-4.2", tag: "Etiqueta 4.2", text: "Inflamación espontánea"},
-            { name: "Gas-Inflamable-Contacto-Agua-4.3(1)", tag: "Etiqueta 4.3", text: "Reacciona al agua produciendo gas inflamable"},
-            { name: "Gas-Inflamable-Contacto-Agua-4.3(2)", tag: "Etiqueta 4.3", text: "Reacciona al agua produciendo gas inflamable"},
-            { name: "Comburente-5.1", tag: "Etiqueta 5.1", text: "Comburente"},
-            { name: "Peroxido-organico-5.1-2005", tag: "Etiqueta 5.2", text: "Peróxido orgánico"},
-            { name: "Peroxido-organico-5.2-2007(1)", tag: "Etiqueta 5.2", text: "Peróxido orgánico"},
-            { name: "Peroxido-organico-5.2-2007(2)", tag: "Etiqueta 5.2", text: "Peróxido orgánico"},
-            { name: "Toxico-6.1", tag: "Etiqueta 6.1", text: "Tóxico"},
-            { name: "Infeccioso-6.2", tag: "Etiqueta 6.2", text: "Infeccioso"},
-            { name: "Radiactivo-exento-7A", tag: "Etiqueta 7A", text: "Radiactivo exento"},
-            { name: "Radiactivo-7B", tag: "Etiqueta 7B", text: "Radiactivo"},
-            { name: "Radiactivo-7C", tag: "Etiqueta 7C", text: "Radiactivo"},
-            { name: "Fisionable-7E", tag: "Etiqueta 7E", text: "Fisionable"},
-            { name: "Radiactivo-Vehiculo-7D", tag: "Etiqueta 7D", text: "Radiactivo vehículo"},
-            { name: "Corrosivo-8", tag: "Etiqueta 8", text: "Corrosivo"},
-            { name: "Otros-peligros-9", tag: "Diversos (9)", text: "Otros peligros"},
-            { name: "Bulto-exento-Carga-general", tag: "Diversos (9)", text: "Bulto exento del RID. Carga general"},
-            { name: "Orientacion-bulto", tag: "Diversos (9)", text: "Orientación del bulto. Obligatorio para: Embalajes combinados con envases interiores que contengan líquidos, envases y embalajes simples con orificios de ventilación, recipientes criógenicos específicos para el transporte de gas licuado refrigerado y máquinas o aparatos que contengan mercancías peligrosas líquidas cuando deba mantenerse en una orientación determinada"},
-            { name: "Sobreembalaje", tag: "Diversos (9)", text: "Sobreembalaje"},
-            { name: "Mercancia-en-caliente", tag: "Diversos (9)", text: "Mercancía transportada en caliente. Para temperaturas >100ºC si son líquidos y >240ºC si son sólidos"},
-            { name: "Unidad-sometida-a-fumigacion", tag: "Diversos (9)", text: "Unidad sometida a fumigación"},
-            { name: "Manipular-con-precaucion-13", tag: "Diversos (9)", text: "Maniobras ferrocarril. Manipular con precaución."},
-            { name: "Prohibida-clasificacion-lanzamiento-o-gravedad", tag: "Diversos (9)", text: "Prohibida clasificación por lanzamiento o gravedad"},
-            { name: "Peligro-medio-ambiente", tag: "", text: "Materia peligrosa para el medio ambiente"},
-            { name: "Peligro-refrigeracion", tag: "", text: "Riesgo de asfixia por materiales peligrosos usados para refrigeración"},
-            { name: "Panel-naranja", tag: "", text: "Medidas: 30*40*15 cm. Nº superior: representa la peligrosidad de la materia, la repetición de un número implica mayor peligrosidad y la X representa que reacciona violentamente con el agua. Los peligros son como exgalisocotorracodi, pero el di(9) es peligro de reacción violenta espontánea. El nº inferior representa el identificador de la materia o nº ONU."},
-            { name: "Banda-naranja", tag: "", text: "En vagones cisterna destinados al transporte de gases liacuados, licuados refrigerados o disueltos. Banda no retrorreflectante que rodea la cisterna a media altura, 30cm de grosor."},
-        ]
-        var fundSings = [
-            { name: "FF1A - Pág. 50", text: "Vía libre"},
-            { name: "FF2 - Pág. 50", text: "Vía libre condicional"},
-            { name: "FF3A - Pág. 50", text: "Anuncio de precaución"},
-            { name: "FF3B - Pág. 50", text: "Anuncio de precaución"},
-            { name: "FF3C - Pág. 50", text: "Anuncio de precaución"},
-            { name: "FF4 - Pág. 51", text: "Preanuncio de parada"},
-            { name: "FF5A - Pág. 51", text: "Anuncio de parada"},
-            { name: "FF5B - Pág. 51", text: "Anuncio de parada"},
-            { name: "FF6 - Pág. 52", text: "Anuncio de parada inmediata"},
-            { name: "FF7A - Pág. 52", text: "Parada"},
-            { name: "FF7B - Pág. 52", text: "Parada"},
-            { name: "FF7C - Pág. 53", text: "Parada selectiva"},
-            { name: "FF7D - Pág. 53", text: "Parada selectiva"},
-            { name: "FF8A - Pág. 54", text: "Rebase autorizado"},
-            { name: "FF8B - Pág. 54", text: "Rebase autorizado"},
-            { name: "FF8C - Pág. 54", text: "Rebase autorizado"},
-            { name: "FF9 - Pág. 55", text: "Movimiento autorizado"},
-            { name: "FF10A - Pág. 55", text: "Paso a nivel protegido"},
-            { name: "FF10B - Pág. 55", text: "Paso a nivel protegido"},
-            { name: "FF11A - Pág. 56", text: "Paso a nivel sin protección"},
-        ]
-        var errorsHistory = [];
-        var verSolucion = false;
-        var signsAnswered=0;
-        var wrongAnswers=0;
-        var totalSigns=0;
-        var signsQuestionnaire = [];
-        var testSelection="";
+         $(document).ready(function(){
+            var errorsHistory = [];
+            var verSolucion = false;
+            var signsAnswered=0;
+            var wrongAnswers=0;
+            var totalSigns=0;
+            
+            var testSelection="";
 
-        checkHistoryCookie();
-
-        function start(button) {
+            checkHistoryCookie();
+       
+         });
+         // TODO: Investigar: No puede ir en document ready???
+         var signsQuestionnaire = []; 
+         function start(button) {
             button.style.display="none";
             button.disabled = true;
             signsAnswered=0;
             wrongAnswers=0;
             initQuestionnaire();
+            $("#quiestionnaire-progress").css('display', 'block');
+            $("#quiestionnaire-progress").children()[0].innerHTML = "Pregunta: " + signsAnswered + " / " + totalSigns;
+            //$("#quiestionnaire-progress").get(0).tagName.toLowerCase()
             toggle(document.getElementById("questions"));
             loadSign();
         }
         function initQuestionnaire() {
             var form = document.getElementById("init_questionnaire_form");
-            for(var i=0; i<form.children.length;i++){
-                if(form.children[i].id=="merc_pel" && form.children[i].checked == true){
-                    testSelection="merc_pel"
+            var radioButtons = $("form input:radio")
+            for(var i=0; i<radioButtons.length;i++){
+                var child = radioButtons[i];
+                if(child.id=="merc_pel" && child.checked == true){
+                    testSelection=MERC_PEL_FOLDER_NAME;
                     for(var i=0;i<mercPelSigns.length;i++){
                         signsQuestionnaire.push(mercPelSigns[i]);
                     }
                     break;
                 }
-                else if(form.children[i].id=="fund" && form.children[i].checked == true){
-                    testSelection="fund"
+                else if(child.id=="fund" && child.checked == true){
+                    testSelection=FUND_FOLDER_NAME;
                     for(var i=0;i<fundSings.length;i++){
                         signsQuestionnaire.push(fundSings[i]);
                     }
+                    console.log(fundSings);
+                    break;
+                }
+                else if(child.id=="transitorias" && child.checked == true){
+                    testSelection=TRANSIT_FOLDER_NAME;
+                    signsQuestionnaire = addTransitSigns();
                     break;
                 }
             }
@@ -212,6 +216,7 @@
         }
         function next(correctAnswer) {
             signsAnswered++;
+            $("#quiestionnaire-progress").children()[0].innerHTML = "Pregunta: " + signsAnswered + " / " + totalSigns;
             if(!correctAnswer){
                 wrongAnswers++;
                 var signName = document.getElementById("sign-name").innerHTML;
@@ -314,13 +319,12 @@
                 //Load historic errors
                 errorsHistory.push({ name: history[i].name, errorCount: history[i].errorCount})
 
-                for(var j=0; j<signs.length;j++){
-                    if(signs[j].name === history[i].name){
+                for(var j=0; j<signsQuestionnaire.length;j++){
+                    if(signsQuestionnaire[j].name === history[i].name){
                         //Add failed question to the pool for each time the user failed it, multiplying probability to get that question
                         for(var k=0;k<history[i].errorCount;k++){
                             signsQuestionnaire.push(signs[j]);
                         }
-                        
                     }
                 }
             }
