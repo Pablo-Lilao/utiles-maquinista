@@ -143,19 +143,18 @@
     </body>
     <script>
          $(document).ready(function(){
-            var errorsHistory = [];
-            var verSolucion = false;
-            var signsAnswered=0;
-            var wrongAnswers=0;
-            var totalSigns=0;
-            
-            var testSelection="";
-
             checkHistoryCookie();
-       
          });
          // TODO: Investigar: No puede ir en document ready???
+         //Inicialización, si lo meto en document.ready fallan cosas
          var signsQuestionnaire = []; 
+         var errorsHistory = [];
+         var verSolucion = false;
+        var signsAnswered=0;
+        var wrongAnswers=0;
+        var totalSigns=0;
+
+        var testSelection="";
          function start(button) {
             button.style.display="none";
             button.disabled = true;
@@ -185,7 +184,6 @@
                     for(var i=0;i<fundSings.length;i++){
                         signsQuestionnaire.push(fundSings[i]);
                     }
-                    console.log(fundSings);
                     break;
                 }
                 else if(child.id=="transitorias" && child.checked == true){
@@ -223,15 +221,16 @@
                 
                 var foundInHistory=false;
                 for(var i=0; i<errorsHistory.length; i++){
-                    if(errorsHistory[i].name == signName){
-                        errorsHistory[i].errorCount++;
-                        foundInHistory = true;
-                        break;
-                    }
+                if(errorsHistory[i].name == signName){
+                    errorsHistory[i].errorCount++;
+                    foundInHistory = true;
+                    break;
+                }
                 }
                 if(foundInHistory == false){
                     errorsHistory.push({ name: signName, errorCount: 1});
                 }
+            
                 updateHistoryCookie();
             }
             if(signsAnswered<totalSigns){
@@ -272,6 +271,7 @@
             }
         }
 
+        // Upload history file
         document.getElementById("uploadHistory").addEventListener('change', readSingleFile, false);
         function readSingleFile(e) {
             var file = e.target.files[0];
