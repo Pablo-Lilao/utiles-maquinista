@@ -5,22 +5,20 @@ function checkHistoryCookie() {
 
     var history = JSON.parse(cookie);
     if(history == ""){ return; }
-    var signsToAdd = [];
+    // Length before adding duplicates
+    var totalQuestions = signsQuestionnaire.length;
     for(var i=0; i<history.length;i++){
         //Load historic errors
         errorsHistory.push({ name: history[i].name, errorCount: history[i].errorCount})
 
-        for(var j=0; j<signsQuestionnaire.length;j++){
+        for(var j=0; j<totalQuestions;j++){
             if(signsQuestionnaire[j].name === history[i].name){
                 //Add failed question to the pool for each time the user failed it, multiplying probability to get that question
                 for(var k=0;k<history[i].errorCount;k++){
-                    signsToAdd.push(signsQuestionnaire[j]);
+                    signsQuestionnaire.push(signsQuestionnaire[j]);
                 }
             }
         }
-    }
-    for(var i=0;i<signsToAdd.length;i++){
-        signsQuestionnaire.push(signsToAdd[i]);
     }
 }
 function getCookie(cname) {
