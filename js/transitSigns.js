@@ -1,7 +1,7 @@
 function addTransitSigns() {
     signs = [];
-    for(var i=0; i<CHECKBOX_LIST.length;i++){
-        var checkbox = document.getElementById(CHECKBOX_LIST[i]);
+    for(var i=0; i<TRANSIT_CHECKBOX_LIST.length;i++){
+        var checkbox = document.getElementById(TRANSIT_CHECKBOX_LIST[i]);
         if(!checkbox){
             continue;
         }
@@ -9,23 +9,23 @@ function addTransitSigns() {
             continue;
         }
         var listedSings=[];
-        switch (CHECKBOX_LIST[i]) {
-            case "fundamentales":
+        switch (TRANSIT_CHECKBOX_LIST[i]) {
+            case "transit_fundamentales":
                 listedSings=transitFundSings;
                 break;
-            case "indicadoras":
-                listedSings=indSings;
+            case "transit_indicadoras":
+                listedSings=transitIndSings;
                 break;
-            case "maniobras":
+            case "transit_maniobras":
                 listedSings=mbrSings;
                 break;
-            case "freno":
+            case "transit_freno":
                 listedSings=frenoSigns;
                 break;
-            case "ram":
+            case "transit_ram":
                 listedSings=ramSigns;
                 break;
-            case "perpignan":
+            case "transit_perpignan":
                 listedSings=perpignanSigns;
                 break;
             default:
@@ -59,7 +59,7 @@ var transitFundSings = [
     { name: "FF12A - Pág. 90", text: "Parada diferida"},
     { name: "FF12B - Pág. 90", text: "Parada diferida"},
 ]
-var indSings = [
+var transitIndSings = [
     { name: "FI16 - Pág. 92", text: "Poste de punto protegido"},
     { name: "FI3E - Pág. 92", text: "Indicadora de dirección de día y noche, indicando vía directa."},
     { name: "FI3F - Pág. 92", text: "Indicadora de dirección de día y noche, indicando desvío a la izquierda."},
@@ -145,4 +145,4 @@ var perpignanSigns = [
     { name: "SII10 - Pág. 116", text: "Señal de las instalaciones. Señal de final de la catenaria. Indica el punto límite que los vehículos de tracción eléctrica no deben rebasar."}
 ]
 
-const CHECKBOX_LIST=["fundamentales", "indicadoras", "maniobras", "freno", "ram", "perpignan"]
+const TRANSIT_CHECKBOX_LIST=["transit_fundamentales", "transit_indicadoras", "transit_maniobras", "transit_freno", "transit_ram", "transit_perpignan"]

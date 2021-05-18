@@ -6,7 +6,7 @@
         <link rel="stylesheeet" type="text/css" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="js/mercPelSings.js"></script>
-        <script src="js/fundSigns.js"></script>
+        <script src="js/sings.js"></script>
         <script src="js/transitSigns.js"></script>
         <script src="js/history.js"></script>
         <script>
@@ -45,11 +45,7 @@
                 </li>
                 <li>
                     <input type="radio" id="fund" name="questions" value="fund" checked>
-                    <label for="fund">Señales fundamentales</label>
-                </li>
-                <li>
-                    <input type="radio" id="transitorias" name="questions" value="transitorias">
-                    <label for="transitorias">Señales transitorias (Si no está marcada se ignoran las subcasillas)</label>
+                    <label for="fund">Señales ferroviarias (no transitorias)</label>
                     <ul>
                         <li>
                             <input type="checkbox" id="fundamentales" name="fundamentales" value="Fundamentales" checked>
@@ -60,20 +56,58 @@
                             <label for="indicadoras">Indicadoras</label>
                         </li>
                         <li>
-                            <input type="checkbox" id="maniobras" name="maniobras" value="maniobras" checked>
-                            <label for="maniobras">Maniobras</label>
+                            <input type="checkbox" id="electrica" name="electrica" value="electrica" checked>
+                            <label for="electrica">Tracción eléctrica</label>
                         </li>
                         <li>
-                            <input type="checkbox" id="freno" name="freno" value="freno" checked>
-                            <label for="freno">Pruebas de freno</label>
+                            <input type="checkbox" id="cartelones" name="cartelones" value="cartelones" checked>
+                            <label for="cartelones">Cartelones</label>
                         </li>
                         <li>
-                            <input type="checkbox" id="ram" name="ram" value="RAM" checked>
-                            <label for="ram">RAM + LZB</label>
+                            <input type="checkbox" id="cambiadores" name="cambiadores" value="cambiadores" checked>
+                            <label for="cambiadores">Cambiadores de ancho</label>
                         </li>
                         <li>
-                            <input type="checkbox" id="perpignan" name="perpignan" value="Perpignan" checked>
-                            <label for="perpignan">Perpignan</label>
+                            <input type="checkbox" id="velocidad" name="velocidad" value="velocidad" checked>
+                            <label for="velocidad">Límites de velocidad</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="portatiles" name="portatiles" value="portatiles" checked>
+                            <label for="portatiles">Portátiles</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="trenes" name="trenes" value="trenes" checked>
+                            <label for="trenes">Señales de los trenes</label>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <input type="radio" id="transitorias" name="questions" value="transitorias">
+                    <label for="transitorias">Señales transitorias (Si no está marcada se ignoran las subcasillas)</label>
+                    <ul>
+                        <li>
+                            <input type="checkbox" id="transit_fundamentales" name="transit_fundamentales" value="Fundamentales" checked>
+                            <label for="transit_fundamentales">Fundamentales</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="transit_indicadoras" name="transit_indicadoras" value="indicadoras" checked>
+                            <label for="transit_indicadoras">Indicadoras</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="transit_maniobras" name="transit_maniobras" value="maniobras" checked>
+                            <label for="transit_maniobras">Maniobras</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="transit_freno" name="transit_freno" value="freno" checked>
+                            <label for="transit_freno">Pruebas de freno</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="transit_ram" name="transit_ram" value="RAM" checked>
+                            <label for="transit_ram">RAM + LZB</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="transit_perpignan" name="transit_perpignan" value="Perpignan" checked>
+                            <label for="transit_perpignan">Perpignan</label>
                         </li>
                     </ul>
                 </li>
@@ -187,9 +221,10 @@
                 }
                 else if(child.id=="fund" && child.checked == true){
                     testSelection=FUND_FOLDER_NAME;
-                    for(var i=0;i<fundSings.length;i++){
-                        signsQuestionnaire.push(fundSings[i]);
-                    }
+                    signsQuestionnaire = addSigns();
+                    // for(var i=0;i<fundSings.length;i++){
+                    //     signsQuestionnaire.push(fundSings[i]);
+                    // }
                     break;
                 }
                 else if(child.id=="transitorias" && child.checked == true){
