@@ -60,7 +60,7 @@ var fundSings = [
     { name: "FF7D - Pág. 53", text: "Parada selectiva"},
     { name: "FF8A - Pág. 54", text: "Rebase autorizado"},
     { name: "FF8B - Pág. 54", text: "Rebase autorizado"},
-    { name: "FF8C - Pág. 54", text: "Rebase autorizado"},
+    { name: "FF8C - Pág. 54", text: "Rebase autorizado. Indica el establecimiento de un itinerario hacia una vía con final a corta distancia."},
     { name: "FF9 - Pág. 55", text: "Movimiento autorizado"},
     { name: "FF10A - Pág. 55", text: "Paso a nivel protegido"},
     { name: "FF10B - Pág. 55", text: "Paso a nivel protegido"},
