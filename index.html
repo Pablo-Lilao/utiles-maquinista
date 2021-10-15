@@ -180,10 +180,6 @@
         $(document).ready(function(){
             // Upload history file
             document.getElementById("uploadHistory").addEventListener('change', readSingleFile, false);
-            // Download history file
-            function downloadHistory() {
-                download(JSON.stringify(errorsHistory), 'practicar-señales-historico.txt', 'text/plain');
-            }
         });
         // TODO: Investigar: No puede ir en document ready???
         //Inicialización, si lo meto en document.ready fallan cosas
@@ -310,5 +306,9 @@
                 i++;
             }
         }
+        // Download history file
+        function downloadHistory() {
+                download(JSON.stringify(errorsHistory), 'practicar-señales-historico.txt', 'text/plain');
+            }
     </script>
 </html>
