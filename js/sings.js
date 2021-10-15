@@ -171,10 +171,10 @@ var cambiaSigns = [
     { name: "FI15J - Pág. 70", text: "LÍMITE DE CONMUTACIÓN. Indica para composiciones CAF, el límite para comprobar que se ha activado la secuencia de cambio."},
     { name: "FI15K - Pág. 70", text: "FINAL OPERACIÓN UNIDAD SIMPLE. Indica para composiciones CAF, en unidad simple, que el último de los ejes ha rebasado la instalación del cambiador, para que desde ese punto pueda reponer el conmutador de cambio a su posición normal."},
     { name: "FI15L - Pág. 70", text: "FINAL OPERACIÓN UNIDAD ACOPLADA. Indica para composiciones CAF, en doble composición, que el último de los ejes ha rebasado la instalación del cambiador, para que desde ese punto pueda reponer el conmutador de cambio a su posición normal."},
-    { name: "FI15M - Pág. 71", text: "CONFIGURAR TREN. Indica para trenes TALGO autopropulsados, accionar el pulsador azul situado en la cabeza motriz."},
-    { name: "FI15N - Pág. 71", text: "INICIO CAMBIO. Indica para trenes TALGO autopropulsados, accionar el pulsador naranja situado en la cabeza motriz."},
-    { name: "FI15Ñ - Pág. 71", text: "FIN CAMBIO DE ANCHO CON UNA COMPOSICIÓN. Indica para trenes TALGO autopropulsados, que ha salido del cambiador, accionar el pulsador azul situado en la cabeza motriz."},
-    { name: "FI15S - Pág. 71", text: "FIN CAMBIO DE ANCHO CON DOS COMPOSICIÓN. Indica para trenes TALGO autopropulsados, que ha salido del cambiador, accionar el pulsador azul situado en la cabeza motriz."},
+    { name: "FI16M - Pág. 71", text: "CONFIGURAR TREN. Indica para trenes TALGO autopropulsados, accionar el pulsador azul situado en la cabeza motriz."},
+    { name: "FI16N - Pág. 71", text: "INICIO CAMBIO. Indica para trenes TALGO autopropulsados, accionar el pulsador naranja situado en la cabeza motriz."},
+    { name: "FI16Ñ - Pág. 71", text: "FIN CAMBIO DE ANCHO CON UNA COMPOSICIÓN. Indica para trenes TALGO autopropulsados, que ha salido del cambiador, accionar el pulsador azul situado en la cabeza motriz."},
+    { name: "FI16O - Pág. 71", text: "FIN CAMBIO DE ANCHO CON DOS COMPOSICIÓN. Indica para trenes TALGO autopropulsados, que ha salido del cambiador, accionar el pulsador azul situado en la cabeza motriz."},
 ]
 var velSings = [
     { name: "FVM3A - Pág. 72", text: "Preanuncio de velocidad máxima. Ordena no exceder la velocidad de 160 km/h al pasar por la señal de anuncio de velocidad máxima situada a continuación. Su posición marca el punto de frenado en el que se debe iniciar el frenado del tren para poder cumplir la orden de la señal de velocidad máxima."},
